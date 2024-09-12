@@ -17,7 +17,7 @@ namespace Concert.API.Controllers
             _concertDbContext = concertDbContext;
         }
 
-        // Get all artists
+        // GET ALL ARTISTS
         // GET: https://localhost:portnumber/api/artists
         [HttpGet]
         public IActionResult GetAll()
@@ -25,6 +25,25 @@ namespace Concert.API.Controllers
             var artists = _concertDbContext.Artists.ToList();
 
             return Ok(artists);
+        }
+
+        // GET SINGLE ARTIST (Get Artist by Id)
+        // GET: https://localhost:portnumber/api/artists/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetById([FromRoute] Guid id)
+        {
+            // Find() only takes primary key as a parameter
+            //var artist = _concertDbContext.Artists.Find(id);
+
+            var artist = _concertDbContext.Artists.FirstOrDefault(x => x.Id == id);
+
+            if (artist == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(artist);
         }
     }
 }
