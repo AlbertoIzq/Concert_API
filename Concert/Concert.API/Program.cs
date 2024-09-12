@@ -1,6 +1,27 @@
 using Concert.API.Data;
+using DotEnv.Core;
 using Microsoft.EntityFrameworkCore;
+using Concert.Utility;
 
+// Environment variables management.
+string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+// Read environment variables.
+new EnvLoader().Load();
+var envVarReader = new EnvReader();
+
+// Get connectionString.
+string connectionString = string.Empty;
+if (envName == SD.ENVIRONMENT_DEVELOPMENT)
+{
+    connectionString = envVarReader["DataBase_ConnectionString_Development"];
+}
+else if (envName == SD.ENVIRONMENT_PRODUCTION)
+{
+    connectionString = Environment.GetEnvironmentVariable("DataBase_ConnectionString_Production");
+}
+
+// Create builder.
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,8 +31,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add the database service.
 builder.Services.AddDbContext<ConcertDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ConcertConnectionString")));
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
