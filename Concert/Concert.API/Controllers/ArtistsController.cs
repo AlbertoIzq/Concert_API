@@ -67,5 +67,33 @@ namespace Concert.API.Controllers
             // Return DTO back to client
             return Ok(artistDto);
         }
+
+        // CREATE NEW ARTIST
+        // POST: https://localhost:portnumber/api/artists
+        [HttpPost]
+        public IActionResult Create([FromBody] AddArtistRequestDto addArtistRequestDto)
+        {
+            // Map or Convert DTO to Domain Model
+            var artistDomain = new Artist()
+            {
+                Name = addArtistRequestDto.Name,
+                ArtistImageUrl = addArtistRequestDto.ArtistImageUrl
+            };
+
+            // Use Domain Model to create Artist
+            _concertDbContext.Artists.Add(artistDomain);
+            _concertDbContext.SaveChanges();
+
+            // Map Domain Model back to DTO
+            var artistDto = new ArtistDto()
+            {
+                Id = artistDomain.Id,
+                Name = artistDomain.Name,
+                ArtistImageUrl = artistDomain.ArtistImageUrl
+            };
+
+            // Show information to the client
+            return CreatedAtAction(nameof(GetById), new { id = artistDomain.Id }, artistDto);
+        }
     }
 }
