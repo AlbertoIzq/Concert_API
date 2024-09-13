@@ -21,10 +21,10 @@ namespace Concert.API.Controllers
         // GET ALL ARTISTS
         // GET: https://localhost:portnumber/api/artists
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             // Get data from database - Domain Model
-            var artistsDomainModel = _concertDbContext.Artists.ToList();
+            var artistsDomainModel = await _concertDbContext.Artists.ToListAsync();
 
             // Map Domain Model to DTO
             var artistsDto = new List<ArtistDto>();
@@ -46,10 +46,10 @@ namespace Concert.API.Controllers
         // GET: https://localhost:portnumber/api/artists/{id}
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             // Get data from database - Domain Model
-            var artistDomainModel = _concertDbContext.Artists.FirstOrDefault(x => x.Id == id);
+            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
 
             if (artistDomainModel == null)
             {
@@ -71,7 +71,7 @@ namespace Concert.API.Controllers
         // CREATE NEW ARTIST
         // POST: https://localhost:portnumber/api/artists
         [HttpPost]
-        public IActionResult Create([FromBody] AddArtistRequestDto addArtistRequestDto)
+        public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
         {
             // Map or Convert DTO to Domain Model
             var artistDomainModel = new Artist()
@@ -81,8 +81,8 @@ namespace Concert.API.Controllers
             };
 
             // Use Domain Model to create Artist
-            _concertDbContext.Artists.Add(artistDomainModel);
-            _concertDbContext.SaveChanges();
+            await _concertDbContext.Artists.AddAsync(artistDomainModel);
+            await _concertDbContext.SaveChangesAsync();
 
             // Map Domain Model back to DTO
             var artistDto = new ArtistDto()
@@ -100,10 +100,10 @@ namespace Concert.API.Controllers
         // PUT: https://localhost:portnumber/api/artists{id}
         [HttpPut]
         [Route("{id:Guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
             // Check if artist exists
-            var artistDomainModel = _concertDbContext.Artists.FirstOrDefault(x => x.Id == id);
+            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
 
             if (artistDomainModel == null)
             {
@@ -114,7 +114,7 @@ namespace Concert.API.Controllers
             artistDomainModel.Name = updateArtistRequestDto.Name;
             artistDomainModel.ArtistImageUrl = updateArtistRequestDto.ArtistImageUrl;
 
-            _concertDbContext.SaveChanges();
+            await _concertDbContext.SaveChangesAsync();
 
             // Convert Domain Model to DTO
             var artistDto = new ArtistDto()
@@ -131,10 +131,10 @@ namespace Concert.API.Controllers
         // DELETE: https://localhost:portnumber/api/artists{id}
         [HttpDelete]
         [Route("{id:Guid}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             // Get data from database - Domain Model
-            var artistDomainModel = _concertDbContext.Artists.FirstOrDefault(x => x.Id == id);
+            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
 
             if (artistDomainModel == null)
             {
@@ -143,7 +143,7 @@ namespace Concert.API.Controllers
 
             // Delete region
             _concertDbContext.Artists.Remove(artistDomainModel);
-            _concertDbContext.SaveChanges();
+            await _concertDbContext.SaveChangesAsync();
 
             // Return deleted artist back to the client
             // Convert Domain Model to DTO
