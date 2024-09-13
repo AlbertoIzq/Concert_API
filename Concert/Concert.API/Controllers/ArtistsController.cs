@@ -126,5 +126,36 @@ namespace Concert.API.Controllers
 
             return Ok(artistDto);
         }
+
+        // DELETE ARTIST
+        // DELETE: https://localhost:portnumber/api/artists{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            // Get data from database - Domain Model
+            var artistDomainModel = _concertDbContext.Artists.FirstOrDefault(x => x.Id == id);
+
+            if (artistDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Delete region
+            _concertDbContext.Artists.Remove(artistDomainModel);
+            _concertDbContext.SaveChanges();
+
+            // Return deleted artist back to the client
+            // Convert Domain Model to DTO
+            var artistDto = new ArtistDto()
+            {
+                Id = artistDomainModel.Id,
+                Name = artistDomainModel.Name,
+                ArtistImageUrl = artistDomainModel.ArtistImageUrl
+            };
+
+            // Return DTO back to client
+            return Ok(artistDto);
+        }
     }
 }
