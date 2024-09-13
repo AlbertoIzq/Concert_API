@@ -2,6 +2,7 @@ using Concert.API.Data;
 using DotEnv.Core;
 using Microsoft.EntityFrameworkCore;
 using Concert.Utility;
+using Concert.API.Repositories;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -34,6 +35,9 @@ builder.Services.AddSwaggerGen();
 // Add the database service.
 builder.Services.AddDbContext<ConcertDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+// Add the repositories.
+builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
 
 var app = builder.Build();
 

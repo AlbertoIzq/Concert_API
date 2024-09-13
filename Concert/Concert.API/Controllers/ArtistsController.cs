@@ -1,6 +1,7 @@
 ﻿using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
+using Concert.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace Concert.API.Controllers
     public class ArtistsController : ControllerBase
     {
         private readonly ConcertDbContext _concertDbContext;
+        private readonly IArtistRepository _artistRepository;
 
-        public ArtistsController(ConcertDbContext concertDbContext)
+        public ArtistsController(ConcertDbContext concertDbContext, IArtistRepository artistRepository)
         {
             _concertDbContext = concertDbContext;
+            _artistRepository = artistRepository;
         }
 
         // GET ALL ARTISTS
@@ -24,7 +27,7 @@ namespace Concert.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             // Get data from database - Domain Model
-            var artistsDomainModel = await _concertDbContext.Artists.ToListAsync();
+            var artistsDomainModel = await _artistRepository.GetAllAsync();
 
             // Map Domain Model to DTO
             var artistsDto = new List<ArtistDto>();
