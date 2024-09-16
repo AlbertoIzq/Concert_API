@@ -7,6 +7,8 @@ _TECHNOLOGIES USED_
 - ASP .NET Core Web API:
 - Entity Framework Core: Object Relational Mapping (ORM) framework
 - SQL Server: Relational DataBase Management System (RDBMS)
+- C# libraries:
+  - Automapper: Object-to-object mapping library
 
 _CONCEPTS USED_
 

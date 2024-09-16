@@ -3,6 +3,7 @@ using DotEnv.Core;
 using Microsoft.EntityFrameworkCore;
 using Concert.Utility;
 using Concert.API.Repositories;
+using Concert.API.Mappings;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -38,6 +39,9 @@ builder.Services.AddDbContext<ConcertDbContext>(options =>
 
 // Add the repositories.
 builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
+
+// Add Automapper.
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

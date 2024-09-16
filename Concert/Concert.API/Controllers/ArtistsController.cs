@@ -1,4 +1,5 @@
-﻿using Concert.API.Data;
+﻿using AutoMapper;
+using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
@@ -13,10 +14,13 @@ namespace Concert.API.Controllers
     public class ArtistsController : ControllerBase
     {
         private readonly IArtistRepository _artistRepository;
+        private readonly IMapper _mapper;
 
-        public ArtistsController(IArtistRepository artistRepository)
+        public ArtistsController(IArtistRepository artistRepository,
+            IMapper mapper)
         {
             _artistRepository = artistRepository;
+            _mapper = mapper;
         }
 
         // GET ALL ARTISTS
@@ -28,16 +32,7 @@ namespace Concert.API.Controllers
             var artistsDomainModel = await _artistRepository.GetAllAsync();
 
             // Map Domain Model to DTO
-            var artistsDto = new List<ArtistDto>();
-            foreach (var artistDomainModel in artistsDomainModel)
-            {
-                artistsDto.Add(new ArtistDto()
-                {
-                    Id = artistDomainModel.Id,
-                    Name = artistDomainModel.Name,
-                    ArtistImageUrl = artistDomainModel.ArtistImageUrl
-                });
-            }
+            var artistsDto = _mapper.Map<List<ArtistDto>>(artistsDomainModel);
 
             // Return DTO back to client
             return Ok(artistsDto);
@@ -58,12 +53,7 @@ namespace Concert.API.Controllers
             }
 
             // Convert Domain Model to DTO
-            var artistDto = new ArtistDto()
-            {
-                Id = artistDomainModel.Id,
-                Name = artistDomainModel.Name,
-                ArtistImageUrl = artistDomainModel.ArtistImageUrl
-            };
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
 
             // Return DTO back to client
             return Ok(artistDto);
@@ -75,22 +65,13 @@ namespace Concert.API.Controllers
         public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
         {
             // Map or Convert DTO to Domain Model
-            var artistDomainModel = new Artist()
-            {
-                Name = addArtistRequestDto.Name,
-                ArtistImageUrl = addArtistRequestDto.ArtistImageUrl
-            };
+            var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
 
             // Use Domain Model to create Artist
             await _artistRepository.CreateAsync(artistDomainModel);
 
             // Map Domain Model back to DTO
-            var artistDto = new ArtistDto()
-            {
-                Id = artistDomainModel.Id,
-                Name = artistDomainModel.Name,
-                ArtistImageUrl = artistDomainModel.ArtistImageUrl
-            };
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
 
             // Show information to the client
             return CreatedAtAction(nameof(GetById), new { id = artistDomainModel.Id }, artistDto);
@@ -103,11 +84,7 @@ namespace Concert.API.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
             // Map DTO to Domain Model
-            var artistDomainModel = new Artist
-            {
-                Name = updateArtistRequestDto.Name,
-                ArtistImageUrl = updateArtistRequestDto.ArtistImageUrl
-            };
+            var artistDomainModel = _mapper.Map<Artist>(updateArtistRequestDto);
     
             // Update artist if it exists
             artistDomainModel = await _artistRepository.UpdateAsync(id, artistDomainModel);
@@ -118,12 +95,7 @@ namespace Concert.API.Controllers
             }
 
             // Convert Domain Model to DTO
-            var artistDto = new ArtistDto()
-            {
-                Id = artistDomainModel.Id,
-                Name = artistDomainModel.Name,
-                ArtistImageUrl = artistDomainModel.ArtistImageUrl
-            };
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
 
             return Ok(artistDto);
         }
@@ -144,12 +116,7 @@ namespace Concert.API.Controllers
 
             // Return deleted artist back to the client
             // Convert Domain Model to DTO
-            var artistDto = new ArtistDto()
-            {
-                Id = artistDomainModel.Id,
-                Name = artistDomainModel.Name,
-                ArtistImageUrl = artistDomainModel.ArtistImageUrl
-            };
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
 
             // Return DTO back to client
             return Ok(artistDto);
