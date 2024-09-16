@@ -11,11 +11,11 @@ namespace Concert.API.Mappings
             // Artist (Domain Model) to ArtistDto
             CreateMap<Artist, ArtistDto>().ReverseMap();
 
-            // AddArtistRequestDto to Artist
             CreateMap<AddArtistRequestDto, Artist>();
-
-            // UpdateArtistRequestDto to Artist
             CreateMap<UpdateArtistRequestDto, Artist>();
+
+            CreateMap<AddSongRequestDto, Song>();
+            CreateMap<Song, SongDto>().ReverseMap();
         }
     }
 }

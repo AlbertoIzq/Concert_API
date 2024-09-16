@@ -49,6 +49,7 @@ builder.Services.AddDbContext<ConcertDbContext>(options =>
 
 // Add the repositories.
 builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
+builder.Services.AddScoped<ISongRepository, SqlSongRepository>();
 
 // Add Automapper.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));

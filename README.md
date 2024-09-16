@@ -16,5 +16,7 @@ _CONCEPTS USED_
 
 _TODO_
 
+- Create an IRepository<T> and refactor all repositories?
+
 _BUGS_
 
