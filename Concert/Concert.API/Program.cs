@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Concert.Utility;
 using Concert.API.Repositories;
 using Concert.API.Mappings;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -31,7 +33,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Workaround for API call error: "The JSON value could not be converted to System.TimeSpan"
+    options.MapType<TimeSpan>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Example = new OpenApiString("00:00:00")
+    });
+});
 
 // Add the database service.
 builder.Services.AddDbContext<ConcertDbContext>(options =>
