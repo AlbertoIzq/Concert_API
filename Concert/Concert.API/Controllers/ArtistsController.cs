@@ -12,12 +12,10 @@ namespace Concert.API.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-        private readonly ConcertDbContext _concertDbContext;
         private readonly IArtistRepository _artistRepository;
 
-        public ArtistsController(ConcertDbContext concertDbContext, IArtistRepository artistRepository)
+        public ArtistsController(IArtistRepository artistRepository)
         {
-            _concertDbContext = concertDbContext;
             _artistRepository = artistRepository;
         }
 
@@ -52,7 +50,7 @@ namespace Concert.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             // Get data from database - Domain Model
-            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
+            var artistDomainModel = await _artistRepository.GetByIdAsync(id);
 
             if (artistDomainModel == null)
             {
@@ -84,8 +82,7 @@ namespace Concert.API.Controllers
             };
 
             // Use Domain Model to create Artist
-            await _concertDbContext.Artists.AddAsync(artistDomainModel);
-            await _concertDbContext.SaveChangesAsync();
+            await _artistRepository.CreateAsync(artistDomainModel);
 
             // Map Domain Model back to DTO
             var artistDto = new ArtistDto()
@@ -105,19 +102,20 @@ namespace Concert.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
-            // Check if artist exists
-            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
+            // Map DTO to Domain Model
+            var artistDomainModel = new Artist
+            {
+                Name = updateArtistRequestDto.Name,
+                ArtistImageUrl = updateArtistRequestDto.ArtistImageUrl
+            };
+    
+            // Update artist if it exists
+            artistDomainModel = await _artistRepository.UpdateAsync(id, artistDomainModel);
 
             if (artistDomainModel == null)
             {
                 return NotFound();
             }
-
-            // Map DTO to Domain Model
-            artistDomainModel.Name = updateArtistRequestDto.Name;
-            artistDomainModel.ArtistImageUrl = updateArtistRequestDto.ArtistImageUrl;
-
-            await _concertDbContext.SaveChangesAsync();
 
             // Convert Domain Model to DTO
             var artistDto = new ArtistDto()
@@ -136,17 +134,13 @@ namespace Concert.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            // Get data from database - Domain Model
-            var artistDomainModel = await _concertDbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
+            // Delete artist if it exists
+            var artistDomainModel = await _artistRepository.DeleteAsync(id);
 
             if (artistDomainModel == null)
             {
                 return NotFound();
             }
-
-            // Delete region
-            _concertDbContext.Artists.Remove(artistDomainModel);
-            await _concertDbContext.SaveChangesAsync();
 
             // Return deleted artist back to the client
             // Convert Domain Model to DTO
