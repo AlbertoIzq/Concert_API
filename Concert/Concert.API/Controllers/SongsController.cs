@@ -54,5 +54,26 @@ namespace Concert.API.Controllers
             // Return DTO to the client
             return Ok(songsDto);
         }
+
+        // GET Artist by Id
+        // GET: api/songs/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            // Get data from database - Domain Model
+            var songDomainModel = await _songRepository.GetByIdAsync(id);
+
+            if (songDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Convert Domain Model to DTO
+            var songDto = _mapper.Map<SongDto>(songDomainModel);
+
+            // Return DTO back to client
+            return Ok(songDto);
+        }
     }
 }
