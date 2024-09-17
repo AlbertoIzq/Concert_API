@@ -12,7 +12,10 @@ _TECHNOLOGIES USED_
 
 _CONCEPTS USED_
 
+- REST (Representational State Transfer)
+- DDD (Domain Driven Development)
 - Asynchronous programming
+- Design patterns: Repository
 
 _TODO_
 

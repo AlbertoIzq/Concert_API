@@ -7,5 +7,6 @@ namespace Concert.API.Repositories
         Task<Song> CreateAsync(Song song);
         Task<List<Song>> GetAllAsync();
         Task<Song?> GetByIdAsync(Guid id);
+        Task<Song?> UpdateAsync(Guid id, Song song);
     }
 }

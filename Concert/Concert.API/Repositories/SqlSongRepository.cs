@@ -38,5 +38,30 @@ namespace Concert.API.Repositories
                 .Include("Language")
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Song?> UpdateAsync(Guid id, Song song)
+        {
+            // Check if it exists
+            var existingSong = await _concertDbContext.Songs.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingSong == null)
+            {
+                return null;
+            }
+
+            // Assign updated values
+            existingSong.Title = song.Title;
+            existingSong.Album = song.Album;
+            existingSong.Length = song.Length;
+            existingSong.ReleaseYear = song.ReleaseYear;
+            existingSong.SongImageUrl = song.SongImageUrl;
+            existingSong.ArtistId = song.ArtistId;
+            existingSong.LanguageId = song.LanguageId;
+            existingSong.GenreId = song.GenreId;
+
+            await _concertDbContext.SaveChangesAsync();
+
+            return existingSong;
+        }
     }
 }

@@ -75,5 +75,29 @@ namespace Concert.API.Controllers
             // Return DTO back to client
             return Ok(songDto);
         }
+
+        // UPDATE Artist
+        // PUT: api/songs/{id}
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, UpdateSongRequestDto updateSongRequestDto)
+        {
+            // Map DTO to Domain Model
+            var songDomainModel = _mapper.Map<Song>(updateSongRequestDto);
+
+            // Update if it exists
+            songDomainModel = await _songRepository.UpdateAsync(id, songDomainModel);
+
+            if (songDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Map Domain Model to DTO
+            var songDto = _mapper.Map<SongDto>(songDomainModel);
+
+            // Return DTO back to the client
+            return Ok(songDto);
+        }
     }
 }

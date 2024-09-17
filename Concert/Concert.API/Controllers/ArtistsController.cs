@@ -23,7 +23,25 @@ namespace Concert.API.Controllers
             _mapper = mapper;
         }
 
-        // GET ALL ARTISTS
+        // CREATE Artist
+        // POST: https://localhost:portnumber/api/artists
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
+        {
+            // Map or Convert DTO to Domain Model
+            var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
+
+            // Use Domain Model to create Artist
+            await _artistRepository.CreateAsync(artistDomainModel);
+
+            // Map Domain Model back to DTO
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
+
+            // Show information to the client
+            return CreatedAtAction(nameof(GetById), new { id = artistDomainModel.Id }, artistDto);
+        }
+
+        // GET ALL Artists
         // GET: https://localhost:portnumber/api/artists
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -57,24 +75,6 @@ namespace Concert.API.Controllers
 
             // Return DTO back to client
             return Ok(artistDto);
-        }
-
-        // CREATE NEW ARTIST
-        // POST: https://localhost:portnumber/api/artists
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
-        {
-            // Map or Convert DTO to Domain Model
-            var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
-
-            // Use Domain Model to create Artist
-            await _artistRepository.CreateAsync(artistDomainModel);
-
-            // Map Domain Model back to DTO
-            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
-
-            // Show information to the client
-            return CreatedAtAction(nameof(GetById), new { id = artistDomainModel.Id }, artistDto);
         }
 
         // UPDATE ARTIST
