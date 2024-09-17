@@ -55,7 +55,7 @@ namespace Concert.API.Controllers
             return Ok(songsDto);
         }
 
-        // GET Artist by Id
+        // GET Song by Id
         // GET: api/songs/{id}
         [HttpGet]
         [Route("{id:Guid}")]
@@ -76,10 +76,10 @@ namespace Concert.API.Controllers
             return Ok(songDto);
         }
 
-        // UPDATE Artist
+        // UPDATE Song
         // PUT: api/songs/{id}
         [HttpPut]
-        [Route("{id:guid}")]
+        [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, UpdateSongRequestDto updateSongRequestDto)
         {
             // Map DTO to Domain Model
@@ -97,6 +97,28 @@ namespace Concert.API.Controllers
             var songDto = _mapper.Map<SongDto>(songDomainModel);
 
             // Return DTO back to the client
+            return Ok(songDto);
+        }
+
+        // DELETE Song
+        // DELETE: api/songs/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            // Delete if it exists
+            var songDomainModel = await _songRepository.DeleteAsync(id);
+
+            if (songDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Return deleted back to the client
+            // Convert Domain Model to DTO
+            var songDto = _mapper.Map<SongDto>(songDomainModel);
+
+            // Return DTO back to client
             return Ok(songDto);
         }
     }

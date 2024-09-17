@@ -63,5 +63,22 @@ namespace Concert.API.Repositories
 
             return existingSong;
         }
+
+        public async Task<Song?> DeleteAsync(Guid id)
+        {
+            // Check if it exists
+            var existingSong= await _concertDbContext.Songs.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingSong == null)
+            {
+                return null;
+            }
+
+            // Delete region
+            _concertDbContext.Songs.Remove(existingSong);
+            await _concertDbContext.SaveChangesAsync();
+
+            return existingSong;
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Concert.API.Repositories
         Task<List<Song>> GetAllAsync();
         Task<Song?> GetByIdAsync(Guid id);
         Task<Song?> UpdateAsync(Guid id, Song song);
+        Task<Song?> DeleteAsync(Guid id);
     }
 }
