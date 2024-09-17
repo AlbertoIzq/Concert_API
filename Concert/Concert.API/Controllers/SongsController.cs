@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Concert.API.CustomActionFilters;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
@@ -25,26 +26,20 @@ namespace Concert.API.Controllers
         // CREATE Song
         // POST: api/songs
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddSongRequestDto addSongRequestDto)
         {
-            if (ModelState.IsValid)
-            {
-                // Map DTO to Domain Model
-                var songDomainModel = _mapper.Map<Song>(addSongRequestDto);
+            // Map DTO to Domain Model
+            var songDomainModel = _mapper.Map<Song>(addSongRequestDto);
 
-                // Create Song
-                await _songRepository.CreateAsync(songDomainModel);
+            // Create Song
+            await _songRepository.CreateAsync(songDomainModel);
 
-                // Map Domain Model back to DTO
-                var songDto = _mapper.Map<SongDto>(songDomainModel);
+            // Map Domain Model back to DTO
+            var songDto = _mapper.Map<SongDto>(songDomainModel);
 
-                // Show information to the client
-                return Ok(songDto);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+            // Show information to the client
+            return Ok(songDto);
         }
 
         // GET ALL Songs
@@ -86,32 +81,26 @@ namespace Concert.API.Controllers
         // UPDATE Song
         // PUT: api/songs/{id}
         [HttpPut]
+        [ValidateModel]
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, UpdateSongRequestDto updateSongRequestDto)
         {
-            if (ModelState.IsValid)
+            // Map DTO to Domain Model
+            var songDomainModel = _mapper.Map<Song>(updateSongRequestDto);
+
+            // Update if it exists
+            songDomainModel = await _songRepository.UpdateAsync(id, songDomainModel);
+
+            if (songDomainModel == null)
             {
-                // Map DTO to Domain Model
-                var songDomainModel = _mapper.Map<Song>(updateSongRequestDto);
-
-                // Update if it exists
-                songDomainModel = await _songRepository.UpdateAsync(id, songDomainModel);
-
-                if (songDomainModel == null)
-                {
-                    return NotFound();
-                }
-
-                // Map Domain Model to DTO
-                var songDto = _mapper.Map<SongDto>(songDomainModel);
-
-                // Return DTO back to the client
-                return Ok(songDto);
+                return NotFound();
             }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+
+            // Map Domain Model to DTO
+            var songDto = _mapper.Map<SongDto>(songDomainModel);
+
+            // Return DTO back to the client
+            return Ok(songDto);
         }
 
         // DELETE Song

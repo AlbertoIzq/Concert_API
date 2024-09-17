@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Concert.API.CustomActionFilters;
 using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
@@ -26,26 +27,20 @@ namespace Concert.API.Controllers
         // CREATE Artist
         // POST: https://localhost:portnumber/api/artists
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
         {
-            if( ModelState.IsValid )
-            {
-                // Map or Convert DTO to Domain Model
-                var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
+            // Map or Convert DTO to Domain Model
+            var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
 
-                // Use Domain Model to create Artist
-                await _artistRepository.CreateAsync(artistDomainModel);
+            // Use Domain Model to create Artist
+            await _artistRepository.CreateAsync(artistDomainModel);
 
-                // Map Domain Model back to DTO
-                var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
+            // Map Domain Model back to DTO
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
 
-                // Show information to the client
-                return CreatedAtAction(nameof(GetById), new { id = artistDomainModel.Id }, artistDto);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+            // Show information to the client
+            return CreatedAtAction(nameof(GetById), new { id = artistDomainModel.Id }, artistDto);
         }
 
         // GET ALL Artists
@@ -87,31 +82,25 @@ namespace Concert.API.Controllers
         // UPDATE ARTIST
         // PUT: https://localhost:portnumber/api/artists{id}
         [HttpPut]
+        [ValidateModel]
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
-            if (ModelState.IsValid)
+            // Map DTO to Domain Model
+            var artistDomainModel = _mapper.Map<Artist>(updateArtistRequestDto);
+
+            // Update artist if it exists
+            artistDomainModel = await _artistRepository.UpdateAsync(id, artistDomainModel);
+
+            if (artistDomainModel == null)
             {
-                // Map DTO to Domain Model
-                var artistDomainModel = _mapper.Map<Artist>(updateArtistRequestDto);
-
-                // Update artist if it exists
-                artistDomainModel = await _artistRepository.UpdateAsync(id, artistDomainModel);
-
-                if (artistDomainModel == null)
-                {
-                    return NotFound();
-                }
-
-                // Convert Domain Model to DTO
-                var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
-
-                return Ok(artistDto);
+                return NotFound();
             }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+
+            // Convert Domain Model to DTO
+            var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);
+
+            return Ok(artistDto);
         }
 
         // DELETE ARTIST
