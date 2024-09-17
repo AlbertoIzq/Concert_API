@@ -23,7 +23,10 @@ namespace Concert.API.Repositories
 
         public async Task<List<Song>> GetAllAsync()
         {
-            return await _concertDbContext.Songs.ToListAsync();
+            return await _concertDbContext.Songs.Include(x => x.Artist)
+                .Include("Genre")
+                .Include("Language")
+                .ToListAsync();
         }
     }
 }

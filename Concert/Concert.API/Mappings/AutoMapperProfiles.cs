@@ -16,6 +16,10 @@ namespace Concert.API.Mappings
 
             CreateMap<AddSongRequestDto, Song>();
             CreateMap<Song, SongDto>().ReverseMap();
+
+            CreateMap<Language, LanguageDto>().ReverseMap();
+
+            CreateMap<Genre, GenreDto>().ReverseMap();
         }
     }
 }

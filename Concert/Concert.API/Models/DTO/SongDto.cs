@@ -8,8 +8,9 @@
         public TimeSpan Length { get; set; }
         public int ReleaseYear { get; set; }
         public string? SongImageUrl { get; set; }
-        public Guid ArtistId { get; set; }
-        public Guid LanguageId { get; set; }
-        public Guid GenreId { get; set; }
+
+        public ArtistDto Artist { get; set; }
+        public LanguageDto Language { get; set; }
+        public GenreDto Genre { get; set; }
     }
 }
