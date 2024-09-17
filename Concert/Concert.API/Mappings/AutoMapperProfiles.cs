@@ -8,14 +8,18 @@ namespace Concert.API.Mappings
     {
         public AutoMapperProfiles()
         {
-            // Artist (Domain Model) to ArtistDto
-            CreateMap<Artist, ArtistDto>().ReverseMap();
-
-            // AddArtistRequestDto to Artist
+            // From Model to Model
             CreateMap<AddArtistRequestDto, Artist>();
-
-            // UpdateArtistRequestDto to Artist
+            CreateMap<Artist, ArtistDto>().ReverseMap();
             CreateMap<UpdateArtistRequestDto, Artist>();
+
+            CreateMap<AddSongRequestDto, Song>();
+            CreateMap<Song, SongDto>().ReverseMap();
+            CreateMap<UpdateSongRequestDto, Song>();
+
+            CreateMap<Language, LanguageDto>().ReverseMap();
+
+            CreateMap<Genre, GenreDto>().ReverseMap();
         }
     }
 }

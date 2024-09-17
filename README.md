@@ -12,9 +12,15 @@ _TECHNOLOGIES USED_
 
 _CONCEPTS USED_
 
+- REST (Representational State Transfer)
+- DDD (Domain Driven Development)
 - Asynchronous programming
+- Design patterns: Repository
 
 _TODO_
+
+- Create an IRepository<T> and refactor all repositories?
+- Correct navigation properties showing null value when Song Update
 
 _BUGS_
 
