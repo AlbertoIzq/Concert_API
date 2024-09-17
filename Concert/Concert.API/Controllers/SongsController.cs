@@ -39,5 +39,20 @@ namespace Concert.API.Controllers
             // Show information to the client
             return Ok(songDto);
         }
+
+        // GET ALL Songs
+        // GET: api/songs
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            // Get all songs
+            var songsDomainModel = await _songRepository.GetAllAsync();
+
+            // Map Domain Model to DTO
+            var songsDto = _mapper.Map<List<SongDto>>(songsDomainModel);
+
+            // Return DTO to the client
+            return Ok(songsDto);
+        }
     }
 }

@@ -20,5 +20,10 @@ namespace Concert.API.Repositories
             await _concertDbContext.SaveChangesAsync();
             return song;
         }
+
+        public async Task<List<Song>> GetAllAsync()
+        {
+            return await _concertDbContext.Songs.ToListAsync();
+        }
     }
 }

@@ -5,5 +5,7 @@ namespace Concert.API.Repositories
     public interface ISongRepository
     {
         Task<Song> CreateAsync(Song song);
+
+        Task<List<Song>> GetAllAsync();
     }
 }
