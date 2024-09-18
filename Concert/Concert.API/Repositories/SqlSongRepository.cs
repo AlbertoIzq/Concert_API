@@ -2,6 +2,7 @@
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Concert.API.Repositories
 {
@@ -21,13 +22,23 @@ namespace Concert.API.Repositories
             return song;
         }
 
-        public async Task<List<Song>> GetAllAsync()
+        public async Task<List<Song>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
         {
-            return await _concertDbContext.Songs
+            var songs = _concertDbContext.Songs
                 .Include(x => x.Artist)
                 .Include("Genre")
-                .Include("Language")
-                .ToListAsync();
+                .Include("Language").AsQueryable();
+
+            // Filtering
+            if (!filterOn.IsNullOrEmpty() && !filterQuery.IsNullOrEmpty())
+            {
+                if (filterOn.Equals("Title", StringComparison.OrdinalIgnoreCase))
+                {
+                    songs = songs.Where(x => x.Title.Contains(filterQuery));
+                }
+            }
+
+            return await songs.ToListAsync();
         }
 
         public async Task<Song?> GetByIdAsync(Guid id)

@@ -5,7 +5,7 @@ namespace Concert.API.Repositories
     public interface ISongRepository
     {
         Task<Song> CreateAsync(Song song);
-        Task<List<Song>> GetAllAsync();
+        Task<List<Song>> GetAllAsync(string? filterOn = null, string? filterQuery = null);
         Task<Song?> GetByIdAsync(Guid id);
         Task<Song?> UpdateAsync(Guid id, Song song);
         Task<Song?> DeleteAsync(Guid id);

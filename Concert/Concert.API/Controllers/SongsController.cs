@@ -43,12 +43,12 @@ namespace Concert.API.Controllers
         }
 
         // GET ALL Songs
-        // GET: api/songs
+        // GET: api/songs?filterOn=PropertyName&filterQuery=PropertyValue e.g. filterOn=Title&filterQuery=military
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             // Get all songs
-            var songsDomainModel = await _songRepository.GetAllAsync();
+            var songsDomainModel = await _songRepository.GetAllAsync(filterOn, filterQuery);
 
             // Map Domain Model to DTO
             var songsDto = _mapper.Map<List<SongDto>>(songsDomainModel);
