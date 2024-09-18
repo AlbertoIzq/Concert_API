@@ -22,7 +22,8 @@ namespace Concert.API.Repositories
             return song;
         }
 
-        public async Task<List<Song>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+        public async Task<List<Song>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
+            string? sortBy = null, bool isAscending = true)
         {
             var songs = _concertDbContext.Songs
                 .Include(x => x.Artist)
@@ -35,6 +36,15 @@ namespace Concert.API.Repositories
                 if (filterOn.Equals("Title", StringComparison.OrdinalIgnoreCase))
                 {
                     songs = songs.Where(x => x.Title.Contains(filterQuery));
+                }
+            }
+
+            // Sorting
+            if (!sortBy.IsNullOrEmpty())
+            {
+                if (sortBy.Equals("Title", StringComparison.OrdinalIgnoreCase))
+                {
+                    songs = isAscending ? songs.OrderBy(x => x.Title) : songs.OrderByDescending(x => x.Title);
                 }
             }
 
