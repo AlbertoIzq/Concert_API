@@ -21,6 +21,10 @@ _TODO_
 
 - Create an IRepository<T> and refactor all repositories?
 - Correct navigation properties showing null value when Song Update
+- Add more filtering and sorting for Song
+- Add filtering and sorting for Artist
+- Add pagination for Artist
+- Add Genre, Language and Service Controllers
 
 _BUGS_
 
