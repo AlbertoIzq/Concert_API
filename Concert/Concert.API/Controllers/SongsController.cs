@@ -3,6 +3,7 @@ using Concert.API.CustomActionFilters;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
+using Concert.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,14 +44,16 @@ namespace Concert.API.Controllers
         }
 
         // GET ALL Songs
-        // GET: api/songs?filterOn=PropertyName&filterQuery=PropertyValue&sortBy=PropertyName&isAscending=true
-        // e.g. filterOn=Title&filterQuery=military&sortBy=Title&isAscending=false
+        // GET: api/songs?filterOn=PropertyName&filterQuery=PropertyValue&sortBy=PropertyName&isAscending=true&pageNumber=x&pageSize=y
+        // e.g. filterOn=Title&filterQuery=military&sortBy=Title&isAscending=false&pageNumber=1&pageSize=10
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
-            [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = SD.SONG_DEFAULT_PAGE_SIZE)
         {
             // Get all songs
-            var songsDomainModel = await _songRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
+            var songsDomainModel = await _songRepository.GetAllAsync(filterOn, filterQuery,
+                sortBy, isAscending ?? true, pageNumber, pageSize);
 
             // Map Domain Model to DTO
             var songsDto = _mapper.Map<List<SongDto>>(songsDomainModel);

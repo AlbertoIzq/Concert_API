@@ -1,6 +1,7 @@
 ﻿using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
+using Concert.Utility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,7 +24,8 @@ namespace Concert.API.Repositories
         }
 
         public async Task<List<Song>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
-            string? sortBy = null, bool isAscending = true)
+            string? sortBy = null, bool isAscending = true,
+            int pageNumber = 1, int pageSize = SD.SONG_DEFAULT_PAGE_SIZE)
         {
             var songs = _concertDbContext.Songs
                 .Include(x => x.Artist)
@@ -48,7 +50,10 @@ namespace Concert.API.Repositories
                 }
             }
 
-            return await songs.ToListAsync();
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            return await songs.Skip(skipResults).Take(pageSize).ToListAsync();
         }
 
         public async Task<Song?> GetByIdAsync(Guid id)
