@@ -9,6 +9,7 @@ _TECHNOLOGIES USED_
 - SQL Server: Relational DataBase Management System (RDBMS)
 - C# libraries:
   - Automapper: Object-to-object mapping library
+  - DotEnv.Core: Manage env. files
 
 _CONCEPTS USED_
 
@@ -16,6 +17,7 @@ _CONCEPTS USED_
 - DDD (Domain Driven Development)
 - Asynchronous programming
 - Design patterns: Repository
+- Environment variables
 
 _TODO_
 

@@ -17,15 +17,18 @@ string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 new EnvLoader().Load();
 var envVarReader = new EnvReader();
 
-// Get connectionString.
+// Get connectionStrings.
 string connectionString = string.Empty;
+string connectionStringAuth = string.Empty;
 if (envName == SD.ENVIRONMENT_DEVELOPMENT)
 {
     connectionString = envVarReader["DataBase_ConnectionString_Development"];
+    connectionStringAuth = envVarReader["DataBase_ConnectionStringAuth_Development"];
 }
 else if (envName == SD.ENVIRONMENT_PRODUCTION)
 {
     connectionString = Environment.GetEnvironmentVariable("DataBase_ConnectionString_Production");
+    connectionStringAuth = Environment.GetEnvironmentVariable("DataBase_ConnectionStringAuth_Production");
 }
 
 // Get JWT parameters
@@ -55,6 +58,8 @@ builder.Services.AddSwaggerGen(options =>
 // Add the database service.
 builder.Services.AddDbContext<ConcertDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ConcertAuthDbContext>(options =>
+    options.UseSqlServer(connectionStringAuth));
 
 // Add the repositories.
 builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
