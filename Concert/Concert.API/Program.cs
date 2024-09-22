@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -68,7 +69,24 @@ builder.Services.AddScoped<ISongRepository, SqlSongRepository>();
 // Add Automapper.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-// Add JWT Authentication
+// Add Identity.
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Concert")
+    .AddEntityFrameworkStores<ConcertAuthDbContext>()
+    .AddDefaultTokenProviders(); // Used to generate tokens to reset passwords, change emails, etc.
+// Configure password settings.
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+});
+
+// Add JWT Authentication.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     options.TokenValidationParameters = new TokenValidationParameters
