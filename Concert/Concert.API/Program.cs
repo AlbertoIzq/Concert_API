@@ -6,6 +6,9 @@ using Concert.API.Repositories;
 using Concert.API.Mappings;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -24,6 +27,12 @@ else if (envName == SD.ENVIRONMENT_PRODUCTION)
 {
     connectionString = Environment.GetEnvironmentVariable("DataBase_ConnectionString_Production");
 }
+
+// Get JWT parameters
+string jwtSecretKey = envVarReader["Jwt_SecretKey"];
+string jwtIssuer = envVarReader["Jwt_Issuer"];
+string jwtAudience = envVarReader["Jwt_Audience"];
+
 
 // Create builder.
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +63,20 @@ builder.Services.AddScoped<ISongRepository, SqlSongRepository>();
 // Add Automapper.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
+// Add JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey))
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,6 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

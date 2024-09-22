@@ -4,6 +4,7 @@ using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace Concert.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArtistsController : ControllerBase
     {
         private readonly IArtistRepository _artistRepository;

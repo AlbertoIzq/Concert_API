@@ -33,7 +33,7 @@ namespace Concert.API.Repositories
                 .Include("Language").AsQueryable();
 
             // Filtering
-            if (!filterOn.IsNullOrEmpty() && !filterQuery.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(filterOn) && !string.IsNullOrEmpty(filterQuery))
             {
                 if (filterOn.Equals("Title", StringComparison.OrdinalIgnoreCase))
                 {
@@ -42,7 +42,7 @@ namespace Concert.API.Repositories
             }
 
             // Sorting
-            if (!sortBy.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(sortBy))
             {
                 if (sortBy.Equals("Title", StringComparison.OrdinalIgnoreCase))
                 {
