@@ -4,6 +4,7 @@ using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
+using Concert.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,6 @@ namespace Concert.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ArtistsController : ControllerBase
     {
         private readonly IArtistRepository _artistRepository;
@@ -30,6 +30,7 @@ namespace Concert.API.Controllers
         // POST: https://localhost:portnumber/api/artists
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
         {
             // Map or Convert DTO to Domain Model
@@ -48,6 +49,7 @@ namespace Concert.API.Controllers
         // GET ALL Artists
         // GET: https://localhost:portnumber/api/artists
         [HttpGet]
+        [Authorize(Roles = SD.READER_ROLE_NAME)]
         public async Task<IActionResult> GetAll()
         {
             // Get data from database - Domain Model
@@ -64,6 +66,7 @@ namespace Concert.API.Controllers
         // GET: https://localhost:portnumber/api/artists/{id}
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = SD.READER_ROLE_NAME)]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             // Get data from database - Domain Model
@@ -86,6 +89,7 @@ namespace Concert.API.Controllers
         [HttpPut]
         [ValidateModel]
         [Route("{id:Guid}")]
+        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
             // Map DTO to Domain Model
@@ -109,6 +113,7 @@ namespace Concert.API.Controllers
         // DELETE: https://localhost:portnumber/api/artists{id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             // Delete artist if it exists
