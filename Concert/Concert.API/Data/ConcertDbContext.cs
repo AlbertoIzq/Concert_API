@@ -16,6 +16,7 @@ namespace Concert.API.Data
         public DbSet<Language> Languages { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
