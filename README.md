@@ -10,6 +10,8 @@ _TECHNOLOGIES USED_
 - C# libraries:
   - Automapper: Object-to-object mapping library
   - DotEnv.Core: Manage env. files
+  - Identity: Manage authentication and authorization
+  - JWT Token: Manage JWT Token for authentication
 
 _CONCEPTS USED_
 
@@ -18,6 +20,7 @@ _CONCEPTS USED_
 - Asynchronous programming
 - Design patterns: Repository
 - Environment variables
+- Authentication and Authorization, JWT Token
 
 _TODO_
 

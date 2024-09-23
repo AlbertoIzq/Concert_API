@@ -1,4 +1,5 @@
 ﻿using Concert.API.Models.DTO;
+using Concert.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace Concert.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            _tokenRepository = tokenRepository;
         }
 
         // POST /api/auth/register
@@ -59,10 +62,20 @@ namespace Concert.API.Controllers
 
                 if (checkPasswordResult)
                 {
-                    // Create Token
-                    /// @todo
+                    // Get roles for this user
+                    var roles = await _userManager.GetRolesAsync(identityUser);
 
-                    return Ok();
+                    if (roles != null)
+                    {
+                        // Create Token
+                        var jwtToken = _tokenRepository.CreateJWTToken(identityUser, roles.ToList());
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+
+                        return Ok(response);
+                    }
                 }
             }
 

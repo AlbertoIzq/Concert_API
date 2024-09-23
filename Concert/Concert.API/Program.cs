@@ -65,6 +65,7 @@ builder.Services.AddDbContext<ConcertAuthDbContext>(options =>
 // Add the repositories.
 builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
 builder.Services.AddScoped<ISongRepository, SqlSongRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // Add Automapper.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
@@ -96,7 +97,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
+        ValidAudiences = new[] { jwtAudience },
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey))
     });
 
