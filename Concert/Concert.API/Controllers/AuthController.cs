@@ -45,5 +45,28 @@ namespace Concert.API.Controllers
 
             return BadRequest("Something went wrong");
         }
+
+        // POST /api/auth/login
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(loginRequestDto.Username);
+
+            if (identityUser != null)
+            {
+                var checkPasswordResult = await _userManager.CheckPasswordAsync(identityUser, loginRequestDto.Password);
+
+                if (checkPasswordResult)
+                {
+                    // Create Token
+                    /// @todo
+
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Username or password are incorrect");
+        }
     }
 }
