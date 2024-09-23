@@ -11,5 +11,7 @@
         public const string WRITER_ROLE_NAME = "Writer";
 
         public const int SONG_DEFAULT_PAGE_SIZE = 1000;
+
+        public const int JWT_TOKEN_EXPIRATION_MINUTES = 15;
     }
 }
