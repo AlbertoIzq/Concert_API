@@ -38,7 +38,7 @@ namespace Concert.API.Controllers
                 {
                     File = uploadImageRequestDto.File,
                     FileName = uploadImageRequestDto.FileName,
-                    FileDescription = uploadImageRequestDto.FileDescription
+                    FileDescription = uploadImageRequestDto.FileDescription,
                     FileExtension = Path.GetExtension(uploadImageRequestDto.File.FileName),
                     FileSizeInBytes = uploadImageRequestDto.File.Length,
                 };
