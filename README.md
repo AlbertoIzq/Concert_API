@@ -21,6 +21,7 @@ _CONCEPTS USED_
 - Design patterns: Repository
 - Environment variables
 - Authentication and Authorization, JWT Token
+- Image upload to a local structure and serving static files through API
 
 _TODO_
 

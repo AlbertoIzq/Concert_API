@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Concert.Utility\Concert.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
 </Project>

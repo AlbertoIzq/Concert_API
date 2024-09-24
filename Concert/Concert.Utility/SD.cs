@@ -13,5 +13,9 @@
         public const int SONG_DEFAULT_PAGE_SIZE = 1000;
 
         public const int JWT_TOKEN_EXPIRATION_MINUTES = 15;
+
+        public static readonly string[] IMAGE_ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png"];
+        public const long IMAGE_MAX_LENGTH_BYTES = 10485760; // 10 MB
+        public const string IMAGES_FOLDER_NAME = "Images";
     }
 }
