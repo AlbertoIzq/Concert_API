@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -146,6 +147,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Connection from the request to the physical path
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), SD.IMAGES_FOLDER_NAME)),
+    RequestPath = $"/{SD.IMAGES_FOLDER_NAME}"
+});
 
 app.MapControllers();
 
