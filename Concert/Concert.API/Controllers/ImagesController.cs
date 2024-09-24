@@ -16,6 +16,13 @@ namespace Concert.API.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
+        private readonly IImageRepository _imageRepository;
+
+        public ImagesController(IImageRepository imageRepository)
+        {
+            _imageRepository = imageRepository;
+        }
+
         // UPLOAD Image
         // POST: /api/Images/Upload
         [HttpPost]
@@ -26,8 +33,20 @@ namespace Concert.API.Controllers
 
             if (ModelState.IsValid)
             {
+                // Convert DTO to Domain model
+                var imageDomainModel = new Image
+                {
+                    File = uploadImageRequestDto.File,
+                    FileName = uploadImageRequestDto.FileName,
+                    FileDescription = uploadImageRequestDto.FileDescription
+                    FileExtension = Path.GetExtension(uploadImageRequestDto.File.FileName),
+                    FileSizeInBytes = uploadImageRequestDto.File.Length,
+                };
+
                 // User repository to upload image
-                /// @todo
+                await _imageRepository.UploadAsync(imageDomainModel);
+
+                return Ok(imageDomainModel);
             }
 
             return BadRequest(ModelState);
