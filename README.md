@@ -12,6 +12,7 @@ _TECHNOLOGIES USED_
   - DotEnv.Core: Manage env. files
   - Identity: Manage authentication and authorization
   - JWT Token: Manage JWT Token for authentication
+  - Serilog: Simple .NET logging with fully-structured events
 
 _CONCEPTS USED_
 
@@ -22,6 +23,7 @@ _CONCEPTS USED_
 - Environment variables
 - Authentication and Authorization, JWT Token
 - Image upload to a local structure and serving static files through API
+- Logging into a file
 
 _TODO_
 
@@ -31,6 +33,8 @@ _TODO_
 - Add filtering and sorting for Artist
 - Add pagination for Artist
 - Add Genre, Language and Service Controllers
+- Add logging to all action methods
+- Change logging messages by using const strings from Utility project. Add reflection to get method name and class name to add it into logging message.
 
 _BUGS_
 
