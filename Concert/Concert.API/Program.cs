@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using Concert.API.Middlewares;
 
 // Environment variables management.
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -152,6 +153,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

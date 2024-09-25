@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using Concert.API.CustomActionFilters;
-using Concert.API.Data;
 using Concert.API.Models.Domain;
 using Concert.API.Models.DTO;
 using Concert.API.Repositories;
 using Concert.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Concert.API.Controllers
