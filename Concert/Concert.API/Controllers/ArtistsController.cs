@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Concert.API.Controllers
 {
@@ -18,12 +19,15 @@ namespace Concert.API.Controllers
     {
         private readonly IArtistRepository _artistRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<ArtistsController> _logger;
 
         public ArtistsController(IArtistRepository artistRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<ArtistsController> logger)
         {
             _artistRepository = artistRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // CREATE Artist
@@ -49,14 +53,18 @@ namespace Concert.API.Controllers
         // GET ALL Artists
         // GET: https://localhost:portnumber/api/artists
         [HttpGet]
-        [Authorize(Roles = SD.READER_ROLE_NAME)]
+        //[Authorize(Roles = SD.READER_ROLE_NAME)]
         public async Task<IActionResult> GetAll()
         {
+            _logger.LogInformation("GetAll Artists action method was invoked");
+
             // Get data from database - Domain Model
             var artistsDomainModel = await _artistRepository.GetAllAsync();
 
             // Map Domain Model to DTO
             var artistsDto = _mapper.Map<List<ArtistDto>>(artistsDomainModel);
+
+            _logger.LogInformation($"Finished GetAll Artists request with data: {JsonSerializer.Serialize(artistsDto)}");
 
             // Return DTO back to client
             return Ok(artistsDto);
