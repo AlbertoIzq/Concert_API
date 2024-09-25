@@ -48,6 +48,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add Serilog
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
+    .WriteTo.File(SD.LOGS_FILE_FULL_PATH, rollingInterval: RollingInterval.Day)
     .MinimumLevel.Information()
     .CreateLogger();
 builder.Logging.ClearProviders();
