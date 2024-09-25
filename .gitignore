@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # MY CUSTOMIZATIONS
 .env
 /Concert/Concert.API/Images
+/Concert/Concert.API/Logs
