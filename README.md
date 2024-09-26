@@ -35,6 +35,7 @@ _TODO_
 - Add Genre, Language and Service Controllers
 - Add logging to all action methods
 - Change logging messages by using const strings from Utility project. Add reflection to get method name and class name to add it into logging message.
+- Add API versioning?
 
 _BUGS_
 
