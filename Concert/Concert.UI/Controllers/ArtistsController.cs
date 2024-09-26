@@ -78,5 +78,27 @@ namespace Concert.UI.Controllers
 
             return View(null);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ArtistDto artistDto)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"https://localhost:7033/api/artists/{artistDto.Id}"),
+                Content = new StringContent(JsonSerializer.Serialize(artistDto), Encoding.UTF8, "application/json")
+            };
+            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
+            httpResponseMessage.EnsureSuccessStatusCode();
+
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<ArtistDto>();
+            if (response is not null)
+            {
+                return RedirectToAction("Edit", "Artists");
+            }
+
+            return View();
+        }
     }
 }
