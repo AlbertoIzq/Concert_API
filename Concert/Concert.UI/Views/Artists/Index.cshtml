@@ -11,6 +11,7 @@
         <tr>
             <th>Id</th>
             <th>Name</th>
+            <th> </th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,9 @@
             <tr>
                 <td>@artist.Id</td>
                 <td>@artist.Name</td>
+                <td>
+                    <a class="btn btn-light" asp-controller="Artists" asp-action="Edit" asp-route-id="@artist.Id">Edit</a>
+                </td>
             </tr>
         }
     </tbody>

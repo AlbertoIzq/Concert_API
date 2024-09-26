@@ -21,7 +21,7 @@ namespace Concert.UI.Controllers
 
             try
             {
-                // Get all regions from web API
+                // Get all artists from web API
                 var client = _httpClientFactory.CreateClient();
                 var httpResponseMessage = await client.GetAsync("https://localhost:7033/api/artists");
 
@@ -63,6 +63,20 @@ namespace Concert.UI.Controllers
             }
 
             return View(); 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetFromJsonAsync<ArtistDto>($"https://localhost:7033/api/artists/{id.ToString()}");
+
+            if (response is not null)
+            {
+                return View(response);
+            }
+
+            return View(null);
         }
     }
 }
