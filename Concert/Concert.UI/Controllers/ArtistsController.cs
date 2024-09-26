@@ -100,5 +100,25 @@ namespace Concert.UI.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(ArtistDto artistDto)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+
+                var httpResponseMessage = await client.DeleteAsync($"https://localhost:7033/api/artists/{artistDto.Id}");
+                httpResponseMessage.EnsureSuccessStatusCode();
+
+                return RedirectToAction("Index", "Artists");
+            }
+            catch (Exception)
+            {
+                // Log the exception
+            }
+
+            return View("Edit");
+        }
     }
 }
