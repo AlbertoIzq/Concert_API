@@ -1,5 +1,8 @@
 ﻿using Concert.UI.Models.DTO;
+using Concert.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Text.Json;
 
 namespace Concert.UI.Controllers
 {
@@ -33,6 +36,33 @@ namespace Concert.UI.Controllers
             }
 
             return View(response);
+        }
+
+        public IActionResult Add()
+        {
+            return View(); 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddArtistVM addArtistVM)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://localhost:7033/api/artists"),
+                Content = new StringContent(JsonSerializer.Serialize(addArtistVM), Encoding.UTF8, "application/json")
+            };
+            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
+            httpResponseMessage.EnsureSuccessStatusCode();
+            
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<ArtistDto>();
+            if (response is not null)
+            {
+                return RedirectToAction("Index", "Artists");
+            }
+
+            return View(); 
         }
     }
 }

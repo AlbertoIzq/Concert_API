@@ -31,7 +31,7 @@ namespace Concert.API.Controllers
         // POST: https://localhost:portnumber/api/artists
         [HttpPost]
         [ValidateModel]
-        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
+        //[Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Create([FromBody] AddArtistRequestDto addArtistRequestDto)
         {
             // Map or Convert DTO to Domain Model
@@ -71,7 +71,7 @@ namespace Concert.API.Controllers
         // GET: https://localhost:portnumber/api/artists/{id}
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize(Roles = SD.READER_ROLE_NAME)]
+        //[Authorize(Roles = SD.READER_ROLE_NAME)]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             // Get data from database - Domain Model
@@ -94,7 +94,7 @@ namespace Concert.API.Controllers
         [HttpPut]
         [ValidateModel]
         [Route("{id:Guid}")]
-        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
+        //[Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateArtistRequestDto updateArtistRequestDto)
         {
             // Map DTO to Domain Model
@@ -118,7 +118,7 @@ namespace Concert.API.Controllers
         // DELETE: https://localhost:portnumber/api/artists{id}
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = SD.WRITER_ROLE_NAME)]
+        //[Authorize(Roles = SD.WRITER_ROLE_NAME)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             // Delete artist if it exists
