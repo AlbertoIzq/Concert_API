@@ -1,6 +1,6 @@
 # Concert API
 
-ASP .NET Core Web API project to manage a database of songs.
+ASP .NET Core Web API project to manage a database of songs. The solution includes a small UI project to consume the API.
 
 _TECHNOLOGIES USED_
 
