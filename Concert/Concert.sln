@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Concert.API", "Concert.API\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Concert.Utility", "Concert.Utility\Concert.Utility.csproj", "{7C0B6E2A-4834-4F24-AC22-EF2EC78C8985}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Concert.UI", "Concert.UI\Concert.UI.csproj", "{B62085C7-69CF-4B28-975C-330A5786BA50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Concert.UI", "Concert.UI\Concert.UI.csproj", "{B62085C7-69CF-4B28-975C-330A5786BA50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Concert.API.Tests", "Concert.API.Tests\Concert.API.Tests.csproj", "{841FD57B-5021-4F1D-B5C2-14B932D614B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{B62085C7-69CF-4B28-975C-330A5786BA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62085C7-69CF-4B28-975C-330A5786BA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62085C7-69CF-4B28-975C-330A5786BA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{841FD57B-5021-4F1D-B5C2-14B932D614B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{841FD57B-5021-4F1D-B5C2-14B932D614B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{841FD57B-5021-4F1D-B5C2-14B932D614B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{841FD57B-5021-4F1D-B5C2-14B932D614B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
