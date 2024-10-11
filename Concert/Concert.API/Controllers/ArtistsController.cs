@@ -38,7 +38,7 @@ namespace Concert.API.Controllers
             var artistDomainModel = _mapper.Map<Artist>(addArtistRequestDto);
 
             // Use Domain Model to create Artist
-            await _artistRepository.CreateAsync(artistDomainModel);
+            artistDomainModel = await _artistRepository.CreateAsync(artistDomainModel);
 
             // Map Domain Model back to DTO
             var artistDto = _mapper.Map<ArtistDto>(artistDomainModel);

@@ -34,7 +34,7 @@ namespace Concert.API.Controllers
             var songDomainModel = _mapper.Map<Song>(addSongRequestDto);
 
             // Create Song
-            await _songRepository.CreateAsync(songDomainModel);
+            songDomainModel = await _songRepository.CreateAsync(songDomainModel);
 
             // Map Domain Model back to DTO
             var songDto = _mapper.Map<SongDto>(songDomainModel);
