@@ -1,6 +1,6 @@
 # Concert API
 
-ASP .NET Core Web API project to manage a database of songs. The solution includes a small UI project to consume the API.
+ASP .NET Core Web API project to manage a database of songs. The solution includes a small UI project to consume the API and a Unit tests project.
 
 _TECHNOLOGIES USED_
 
@@ -13,6 +13,8 @@ _TECHNOLOGIES USED_
   - Identity: Manage authentication and authorization
   - JWT Token: Manage JWT Token for authentication
   - Serilog: Simple .NET logging with fully-structured events
+  - XUnit: Unit tests
+  - Moq: Mocking used for unit tests
 
 _CONCEPTS USED_
 
@@ -39,8 +41,6 @@ _TODO_
   - Add API versioning?
 - UI
   - Refactor base URL to appsettings
-- Unit Testing
-  - Use Xunit and Mock to add some unit tests
 
 _BUGS_
 
