@@ -39,6 +39,8 @@ _TODO_
   - Add API versioning?
 - UI
   - Refactor base URL to appsettings
+- Unit Testing
+  - Use Xunit and Mock to add some unit tests
 
 _BUGS_
 
