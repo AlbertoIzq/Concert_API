@@ -27,9 +27,25 @@ namespace Concert.API.Repositories
             // Read environment variables.
             new EnvLoader().Load();
             var envVarReader = new EnvReader();
-            string jwtSecretKey = envVarReader["Jwt_SecretKey"];
-            string jwtIssuer = envVarReader["Jwt_Issuer"];
-            string jwtAudience = envVarReader["Jwt_Audience"];
+            string jwtSecretKey = string.Empty;
+            string jwtIssuer = string.Empty;
+            string jwtAudience = string.Empty;
+
+            // Environment variables management.
+            string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            if (envName == Environments.Development)
+            {
+                jwtSecretKey = envVarReader["Jwt_SecretKey"];
+                jwtIssuer = envVarReader["Jwt_Issuer"];
+                jwtAudience = envVarReader["Jwt_Audience"];
+            }
+            else if (envName == Environments.Production)
+            {
+                jwtSecretKey = Environment.GetEnvironmentVariable("Jwt_SecretKey");
+                jwtIssuer = Environment.GetEnvironmentVariable("Jwt_Issuer");
+                jwtAudience = Environment.GetEnvironmentVariable("Jwt_Audience");
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

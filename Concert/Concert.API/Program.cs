@@ -14,35 +14,40 @@ using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Concert.API.Middlewares;
 
+// Create builder.
+var builder = WebApplication.CreateBuilder(args);
+
 // Environment variables management.
+
 string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
 // Read environment variables.
 new EnvLoader().Load();
 var envVarReader = new EnvReader();
 
-// Get connectionStrings.
+// Get connectionStrings and JWT parameters.
 string connectionString = string.Empty;
 string connectionStringAuth = string.Empty;
-if (envName == SD.ENVIRONMENT_DEVELOPMENT)
+string jwtSecretKey = string.Empty;
+string jwtIssuer = string.Empty;
+string jwtAudience = string.Empty;
+
+if (envName == Environments.Development)
 {
-    connectionString = envVarReader["DataBase_ConnectionString_Development"];
-    connectionStringAuth = envVarReader["DataBase_ConnectionStringAuth_Development"];
+    connectionString = envVarReader["DataBase_ConnectionString"];
+    connectionStringAuth = envVarReader["DataBaseAuth_ConnectionString"];
+    jwtSecretKey = envVarReader["Jwt_SecretKey"];
+    jwtIssuer = envVarReader["Jwt_Issuer"];
+    jwtAudience = envVarReader["Jwt_Audience"];
 }
-else if (envName == SD.ENVIRONMENT_PRODUCTION)
+else if (envName == Environments.Production)
 {
-    connectionString = Environment.GetEnvironmentVariable("DataBase_ConnectionString_Production");
-    connectionStringAuth = Environment.GetEnvironmentVariable("DataBase_ConnectionStringAuth_Production");
+    connectionString = Environment.GetEnvironmentVariable("DataBase_ConnectionString");
+    connectionStringAuth = Environment.GetEnvironmentVariable("DataBaseAuth_ConnectionString");
+    jwtSecretKey = Environment.GetEnvironmentVariable("Jwt_SecretKey");
+    jwtIssuer = Environment.GetEnvironmentVariable("Jwt_Issuer");
+    jwtAudience = Environment.GetEnvironmentVariable("Jwt_Audience");
 }
-
-// Get JWT parameters
-string jwtSecretKey = envVarReader["Jwt_SecretKey"];
-string jwtIssuer = envVarReader["Jwt_Issuer"];
-string jwtAudience = envVarReader["Jwt_Audience"];
-
-
-// Create builder.
-var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -161,7 +166,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Connection from the request to the physical path
+// Connection from the request to the physical path.
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), SD.IMAGES_FOLDER_NAME)),
