@@ -37,16 +37,16 @@ namespace Concert.API.Tests
         public async Task Create_ReturnsOk()
         {
             // Arrange
-            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreate);
+            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreateAndGetById);
 
             // Act
             var actionResult = await _sut.Create(_addArtistRequestDtoCreate);
 
             // Assert
-            var createdResult = Assert.IsType<CreatedAtActionResult>(actionResult);
-            var result = Assert.IsAssignableFrom<ArtistDto>(createdResult.Value);
-            var expected = _ArtistDtoCreate;
-            Assert.Equal(expected, result);
+            var result = Assert.IsType<CreatedAtActionResult>(actionResult);
+            var resultValue = Assert.IsAssignableFrom<ArtistDto>(result.Value);
+            var expected = _ArtistDtoCreateAndGetById;
+            Assert.Equal(expected, resultValue);
         }
 
         [Fact]
@@ -59,11 +59,42 @@ namespace Concert.API.Tests
             var actionResult = await _sut.GetAll();
 
             // Assert
-            var createdResult = Assert.IsType<OkObjectResult>(actionResult);
-            var result = Assert.IsAssignableFrom<List<ArtistDto>>(createdResult.Value);
+            var result = Assert.IsType<OkObjectResult>(actionResult);
+            var resultValue = Assert.IsAssignableFrom<List<ArtistDto>>(result.Value);
             var expected = _ArtistsDtoGetAll;
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, resultValue);
         }
+
+        [Fact]
+        public async Task GetById_ReturnsOk()
+        {
+            // Arrange
+            _artistRepositoryMock.Setup(x => x.GetByIdAsync(_guidGetById)).ReturnsAsync(_ArtistCreateAndGetById);
+
+            // Act
+            var actionResult = await _sut.GetById(_guidGetById);
+
+            // Assert
+            var result = Assert.IsType<OkObjectResult>(actionResult);
+            var resultValue = Assert.IsAssignableFrom<ArtistDto>(result.Value);
+            var expected = _ArtistDtoCreateAndGetById;
+            Assert.Equal(expected, resultValue);
+        }
+
+        [Fact]
+        public async Task GetById_ReturnsNotFound()
+        {
+            // Arrange
+            _artistRepositoryMock.Setup(x => x.GetByIdAsync(_guidGetById)).ReturnsAsync(_ArtistCreateAndGetById);
+
+            // Act
+            var actionResult = await _sut.GetById(_guidGetByIdNotFound);
+
+            // Assert
+            var result = Assert.IsType<NotFoundResult>(actionResult);
+        }
+
+        #region TestData
 
         private AddArtistRequestDto _addArtistRequestDtoCreate = new AddArtistRequestDto
         {
@@ -71,14 +102,14 @@ namespace Concert.API.Tests
             ArtistImageUrl = null
         };
 
-        private Artist _ArtistCreate= new Artist
+        private Artist _ArtistCreateAndGetById = new Artist
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
             ArtistImageUrl = null
         };
 
-        private ArtistDto _ArtistDtoCreate = new ArtistDto
+        private ArtistDto _ArtistDtoCreateAndGetById = new ArtistDto
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
@@ -112,5 +143,10 @@ namespace Concert.API.Tests
                 Name = "Cypis"
             }
         };
+
+        private Guid _guidGetById = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c");
+        private Guid _guidGetByIdNotFound = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69d");
+
+        #endregion
     }
 }
