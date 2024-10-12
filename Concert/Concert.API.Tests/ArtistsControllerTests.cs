@@ -37,32 +37,32 @@ namespace Concert.API.Tests
         public async Task Create_ReturnsOk()
         {
             // Arrange
-            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreate);
+            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreateOk);
 
             // Act
-            var actionResult = await _sut.Create(_addArtistRequestDtoCreate);
+            var actionResult = await _sut.Create(_addArtistRequestDtoCreateOk);
 
             // Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(actionResult);
             var result = Assert.IsAssignableFrom<ArtistDto>(createdResult.Value);
-            var expected = _ArtistDtoCreate;
+            var expected = _ArtistDtoCreateOk;
             Assert.Equal(expected, result);
         }
 
-        private AddArtistRequestDto _addArtistRequestDtoCreate = new AddArtistRequestDto
+        private AddArtistRequestDto _addArtistRequestDtoCreateOk = new AddArtistRequestDto
         {
             Name = "Artist test",
             ArtistImageUrl = null
         };
 
-        private Artist _ArtistCreate = new Artist
+        private Artist _ArtistCreateOk = new Artist
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
             ArtistImageUrl = null
         };
 
-        private ArtistDto _ArtistDtoCreate = new ArtistDto
+        private ArtistDto _ArtistDtoCreateOk = new ArtistDto
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
