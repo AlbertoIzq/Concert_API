@@ -37,36 +37,80 @@ namespace Concert.API.Tests
         public async Task Create_ReturnsOk()
         {
             // Arrange
-            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreateOk);
+            _artistRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Artist>())).ReturnsAsync(_ArtistCreate);
 
             // Act
-            var actionResult = await _sut.Create(_addArtistRequestDtoCreateOk);
+            var actionResult = await _sut.Create(_addArtistRequestDtoCreate);
 
             // Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(actionResult);
             var result = Assert.IsAssignableFrom<ArtistDto>(createdResult.Value);
-            var expected = _ArtistDtoCreateOk;
+            var expected = _ArtistDtoCreate;
             Assert.Equal(expected, result);
         }
 
-        private AddArtistRequestDto _addArtistRequestDtoCreateOk = new AddArtistRequestDto
+        [Fact]
+        public async Task GetAll_ReturnsOk()
+        {
+            // Arrange
+            _artistRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(_ArtistsGetAll);
+
+            // Act
+            var actionResult = await _sut.GetAll();
+
+            // Assert
+            var createdResult = Assert.IsType<OkObjectResult>(actionResult);
+            var result = Assert.IsAssignableFrom<List<ArtistDto>>(createdResult.Value);
+            var expected = _ArtistsDtoGetAll;
+            Assert.Equal(expected, result);
+        }
+
+        private AddArtistRequestDto _addArtistRequestDtoCreate = new AddArtistRequestDto
         {
             Name = "Artist test",
             ArtistImageUrl = null
         };
 
-        private Artist _ArtistCreateOk = new Artist
+        private Artist _ArtistCreate= new Artist
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
             ArtistImageUrl = null
         };
 
-        private ArtistDto _ArtistDtoCreateOk = new ArtistDto
+        private ArtistDto _ArtistDtoCreate = new ArtistDto
         {
             Id = Guid.Parse("9fc5f185-c6c3-4bcd-90c0-74e35304d69c"),
             Name = "Artist test",
             ArtistImageUrl = null
+        };
+
+        private List<Artist> _ArtistsGetAll = new List<Artist>
+        {
+            new Artist
+            {
+                Id = Guid.Parse("BD49D4C3-849D-41A8-5925-08DCD6993C5C"),
+                Name = "Ace of base"
+            },
+            new Artist
+            {
+                Id = Guid.Parse("F03ABFB0-397A-4790-D7F6-08DCD7FC4FB7"),
+                Name = "Cypis"
+            }
+        };
+
+        private List<ArtistDto> _ArtistsDtoGetAll = new List<ArtistDto>
+        {
+            new ArtistDto
+            {
+                Id = Guid.Parse("BD49D4C3-849D-41A8-5925-08DCD6993C5C"),
+                Name = "Ace of base"
+            },
+            new ArtistDto
+            {
+                Id = Guid.Parse("F03ABFB0-397A-4790-D7F6-08DCD7FC4FB7"),
+                Name = "Cypis"
+            }
         };
     }
 }
